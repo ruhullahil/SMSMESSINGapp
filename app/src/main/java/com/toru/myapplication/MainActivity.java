@@ -6,8 +6,10 @@ import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.View;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -18,9 +20,9 @@ public class MainActivity extends AppCompatActivity {
      private ViewPager pview;
      private  viewPageAdapter adapter;
 
-    private final static int REQUEST_CODE_PERMISSION_SEND_SMS = 123;
+    private final static int REQUEST_CODE_PERMISSION_SEND_SMS = 1;
     public static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
-    private final static int REQUEST_CODE_PERMISSION_READ_SMS = 456;
+    private final static int REQUEST_CODE_PERMISSION_READ_SMS = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +79,25 @@ public class MainActivity extends AppCompatActivity {
 
         if (checkPermission(Manifest.permission.SEND_SMS)) {
 
-            //we need to use floting button
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent send = new Intent(MainActivity.this,show_one.class);
+                    String str = "";
+                    Boolean set =  true;
+                    Bundle bundle = new Bundle();
+
+
+                    bundle.putString("stuf",str);
+                    bundle.putBoolean("set",set);
+
+
+                    send.putExtras(bundle);
+
+                    startActivity(send);
+                }
+            });
 
 
         } else {

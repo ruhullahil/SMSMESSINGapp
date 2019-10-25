@@ -2,6 +2,7 @@ package com.toru.myapplication;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -53,6 +54,22 @@ public class others extends Fragment {
                 Message message = dumy.get(position);
                 String s = message.getContactNumber()+"  "+message.getMessageText();
                 Toast.makeText(getContext().getApplicationContext(),s,Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(getActivity(),show_one.class);
+                String str = message.getContactNumber();
+                Boolean set =  false;
+                Bundle bundle = new Bundle();
+
+
+                bundle.putString("stuf",str);
+                bundle.putBoolean("set",set);
+
+
+                i.putExtras(bundle);
+
+
+                startActivity(i);
+
+
 
             }
         });

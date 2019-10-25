@@ -62,10 +62,12 @@ public class fcous extends Fragment {
                 Toast.makeText(getContext().getApplicationContext(),s,Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(getActivity(),show_one.class);
                 String str = message.getContactNumber();
+                Boolean set =  false;
                 Bundle bundle = new Bundle();
 
 
                 bundle.putString("stuf",str);
+                bundle.putBoolean("set",set);
 
 
                 i.putExtras(bundle);

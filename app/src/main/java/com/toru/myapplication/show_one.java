@@ -1,15 +1,22 @@
 package com.toru.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.content.ContentResolver;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +26,8 @@ public class show_one extends AppCompatActivity {
     private RecyclerView Usermessages;
     private ImageButton send;
     private List<Message> oneuser  = new ArrayList<>();
-    String contact;
+    String contact ,phoneNo ,message;
+    private static final int MY_PERMISSIONS_REQUEST_SEND_SMS =0 ;
 
    //private List<Message> dumy = new ArrayList<>();
     @Override
@@ -35,8 +43,9 @@ public class show_one extends AppCompatActivity {
 
 //Extract the data…
          contact = bundle.getString("stuf");
+         Boolean set = bundle.getBoolean("set");
         userName.setText(contact);
-        userName.setEnabled(false);
+        userName.setEnabled(set);
 
         /*
         dumy.add(new Message("01712666125","hi . how are you"));
@@ -79,6 +88,29 @@ public class show_one extends AppCompatActivity {
         Usermessages.setAdapter(adapter);
 
        refreshInbox();
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+              try {
+                  String msg = messageText.getText().toString();
+                  String phoneNum = userName.getText().toString();
+
+                  SmsManager smsMan = SmsManager.getDefault();
+                  smsMan.sendTextMessage(phoneNum, null, msg, null, null);
+                  Toast.makeText(show_one.this,
+                          "SMS send to " + phoneNum, Toast.LENGTH_LONG).show();
+              } catch (Exception e) {
+                  Toast.makeText(show_one.this,
+                          e.getMessage(), Toast.LENGTH_LONG).show();
+
+              }
+
+
+                //sendSMSMessage();
+
+            }
+        });
 
 
 
@@ -109,6 +141,45 @@ public class show_one extends AppCompatActivity {
 
 
         }while (smsInboxCursor.moveToNext());
+    }
+
+    protected void sendSMSMessage() {
+
+        phoneNo = userName.getText().toString();
+        message = messageText.getText().toString();
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.SEND_SMS)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.SEND_SMS)) {
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.SEND_SMS},
+                        MY_PERMISSIONS_REQUEST_SEND_SMS);
+            }
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_SEND_SMS: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    SmsManager smsManager = SmsManager.getDefault();
+                    smsManager.sendTextMessage(phoneNo, null, message, null, null);
+                    Toast.makeText(getApplicationContext(), "SMS sent.",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            "SMS faild, please try again.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }
+        }
+
     }
 }
 
