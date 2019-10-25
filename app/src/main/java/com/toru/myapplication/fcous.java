@@ -3,6 +3,7 @@ package com.toru.myapplication;
 import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -59,6 +60,19 @@ public class fcous extends Fragment {
                 Message message = dumy.get(position);
                 String s = message.getContactNumber()+"  "+message.getMessageText();
                 Toast.makeText(getContext().getApplicationContext(),s,Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(getActivity(),show_one.class);
+                String str = message.getContactNumber();
+                Bundle bundle = new Bundle();
+
+
+                bundle.putString("stuf",str);
+
+
+                i.putExtras(bundle);
+
+
+                startActivity(i);
+
 
 
             }
