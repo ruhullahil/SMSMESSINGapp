@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
      private  viewPageAdapter adapter;
 
     private final static int REQUEST_CODE_PERMISSION_SEND_SMS = 1;
+
     public static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
     private final static int REQUEST_CODE_PERMISSION_READ_SMS = 1;
     @Override
